@@ -6,7 +6,9 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import LeadsPage from './pages/LeadsPage';
 
-function RequireAuth({ children }: { children: JSX.Element }) {
+import type { ReactNode } from 'react';
+
+function RequireAuth({ children }: { children: ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
   
   if (isLoading) return null;

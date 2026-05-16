@@ -38,6 +38,17 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger';
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// ── Serve Frontend ────────────────────────────────────────────────────────────
+import path from 'path';
+
+// Serve static files from the dist folder
+app.use(express.static(path.join(__dirname, '..', 'dist')));
+
+// Catch-all route to serve index.html for client-side routing
+app.get(/^(?!\/api).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
+});
+
 // ── Error handling ────────────────────────────────────────────────────────────
 app.use(notFound);
 app.use(errorHandler);

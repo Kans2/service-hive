@@ -4,7 +4,7 @@ import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
-import { X, Mail, Globe, Calendar, User as UserIcon } from 'lucide-react';
+import { X, Mail, Globe, Calendar } from 'lucide-react';
 
 interface LeadModalProps {
   lead: Lead | null;
