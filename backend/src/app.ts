@@ -33,6 +33,11 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/leads', leadRoutes);
 
+// ── Swagger API Documentation ──────────────────────────────────────────────────
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './config/swagger';
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 // ── Error handling ────────────────────────────────────────────────────────────
 app.use(notFound);
 app.use(errorHandler);
