@@ -59,12 +59,17 @@ export default function LeadsPage() {
 
   const fetchStats = useCallback(async () => {
     try {
-      const { data } = await api.get<ApiResponse<Record<string, number>>>('/leads/stats');
+      const params = new URLSearchParams({
+        ...(debouncedSearch && { search: debouncedSearch }),
+        ...(statusFilter && { status: statusFilter }),
+        ...(sourceFilter && { source: sourceFilter }),
+      });
+      const { data } = await api.get<ApiResponse<Record<string, number>>>(`/leads/stats?${params}`);
       setStats(data.data || null);
     } catch (error) {
       console.error('Failed to fetch stats');
     }
-  }, []);
+  }, [debouncedSearch, statusFilter, sourceFilter]);
 
   useEffect(() => {
     fetchLeads();
@@ -189,33 +194,34 @@ export default function LeadsPage() {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as LeadStatus | '')}
-          className="w-full px-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all font-outfit text-black dark:text-white appearance-none relative z-10"
+          className="w-full px-4 py-3.5 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black dark:focus:border-white transition-all font-sans appearance-none relative z-10 cursor-pointer"
         >
-          <option value="">All Statuses</option>
-          <option value="New">New</option>
-          <option value="Contacted">Contacted</option>
-          <option value="Qualified">Qualified</option>
-          <option value="Lost">Lost</option>
+          <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="">All Statuses</option>
+          <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="New">New</option>
+          <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Contacted">Contacted</option>
+          <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Qualified">Qualified</option>
+          <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Lost">Lost</option>
         </select>
 
         <select
           value={sourceFilter}
           onChange={(e) => setSourceFilter(e.target.value as LeadSource | '')}
-          className="w-full px-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all font-outfit text-black dark:text-white appearance-none relative z-10"
+          className="w-full px-4 py-3.5 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black dark:focus:border-white transition-all font-sans appearance-none relative z-10 cursor-pointer"
         >
-          <option value="">All Sources</option>
-          <option value="Website">Website</option>
-          <option value="Instagram">Instagram</option>
-          <option value="Referral">Referral</option>
+          <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="">All Sources</option>
+          <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Website">Website</option>
+          <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Instagram">Instagram</option>
+          <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Google">Google</option>
+          <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Referral">Referral</option>
         </select>
 
         <select
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value as 'latest' | 'oldest')}
-          className="w-full px-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all font-outfit text-black dark:text-white appearance-none relative z-10"
+          className="w-full px-4 py-3.5 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black dark:focus:border-white transition-all font-sans appearance-none relative z-10 cursor-pointer"
         >
-          <option value="latest">Latest First</option>
-          <option value="oldest">Oldest First</option>
+          <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="latest">Latest First</option>
+          <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="oldest">Oldest First</option>
         </select>
       </div>
 
@@ -257,7 +263,11 @@ export default function LeadsPage() {
                 </tr>
               ) : (
                 leads.map((lead) => (
-                  <tr key={lead._id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                  <tr 
+                    key={lead._id} 
+                    className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer"
+                    onClick={() => openModal('view', lead)}
+                  >
                     <td className="px-6 py-4 font-medium">{lead.name}</td>
                     <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{lead.email}</td>
                     <td className="px-6 py-4">
@@ -268,7 +278,7 @@ export default function LeadsPage() {
                     <td className="px-6 py-4 text-slate-500">{lead.source}</td>
                     <td className="px-6 py-4 text-right space-x-2">
                       <button
-                        onClick={() => openModal('view', lead)}
+                        onClick={(e) => { e.stopPropagation(); openModal('view', lead); }}
                         className="p-2 text-slate-400 hover:text-blue-600 transition-colors"
                         title="View Details"
                       >
@@ -276,7 +286,7 @@ export default function LeadsPage() {
                       </button>
                       {(user?.role === 'admin' || (typeof lead.createdBy === 'object' ? ((lead.createdBy as any)._id || (lead.createdBy as any).id) === user?.id : lead.createdBy === user?.id)) && (
                         <button
-                          onClick={() => openModal('edit', lead)}
+                          onClick={(e) => { e.stopPropagation(); openModal('edit', lead); }}
                           className="p-2 text-slate-400 hover:text-primary-600 transition-colors"
                           title="Edit"
                         >
@@ -285,7 +295,7 @@ export default function LeadsPage() {
                       )}
                       {user?.role === 'admin' && (
                         <button
-                          onClick={() => setLeadToDelete(lead._id)}
+                          onClick={(e) => { e.stopPropagation(); setLeadToDelete(lead._id); }}
                           className="p-2 text-slate-400 hover:text-red-600 transition-colors"
                           title="Delete"
                         >
@@ -302,12 +312,12 @@ export default function LeadsPage() {
 
         {/* Pagination */}
         {meta && meta.totalPages > 1 && (
-          <div className="px-6 py-4 border-t border-border flex items-center justify-between">
-            <span className="text-sm text-slate-500">
+          <div className="px-6 py-4 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span className="text-sm text-slate-500 text-center sm:text-left">
               Showing {(meta.currentPage - 1) * meta.limit + 1} to{' '}
               {Math.min(meta.currentPage * meta.limit, meta.totalCount)} of {meta.totalCount} results
             </span>
-            <div className="flex gap-2">
+            <div className="flex gap-2 w-full sm:w-auto justify-center sm:justify-end">
               <Button
                 variant="secondary"
                 size="sm"

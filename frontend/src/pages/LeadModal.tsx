@@ -101,34 +101,47 @@ export default function LeadModal({ lead, mode, isOpen, onClose, onSuccess }: Le
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-      <div className="bg-card w-full max-w-md rounded-2xl shadow-xl border border-border">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-          <h3 className="text-lg font-semibold">
-            {mode === 'view' ? 'Lead Details' : mode === 'edit' ? 'Edit Lead' : 'Add New Lead'}
-          </h3>
-          <button type="button" onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
-            <X className="w-5 h-5" />
+      <div className="w-full max-w-md bento-card relative overflow-hidden group">
+        <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-32 h-32 bg-slate-500/10 dark:bg-slate-400/10 rounded-full blur-[40px] group-hover:bg-slate-500/20 transition-all duration-500 pointer-events-none"></div>
+        
+        <div className="absolute top-4 right-4 z-20">
+          <button type="button" onClick={onClose} className="p-2 bg-slate-100 dark:bg-slate-800 rounded-full text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors border border-border">
+            <X className="w-4 h-4" />
           </button>
+        </div>
+
+        <div className="text-center mb-6 pt-10 px-6 relative z-10">
+          <h2 className="text-3xl font-space-grotesk font-bold text-slate-900 dark:text-white tracking-tight">
+            {mode === 'view' ? 'Lead Profile' : mode === 'edit' ? 'Edit Lead' : 'Add New Lead'}
+          </h2>
+          <p className="text-slate-500 dark:text-slate-400 mt-2 text-sm font-outfit">
+            {mode === 'view' ? 'Reviewing prospect details' : mode === 'edit' ? 'Update prospect information' : 'Enter details for a new prospect'}
+          </p>
         </div>
 
         {mode === 'view' ? (
           <div className="p-6 space-y-6">
-            <div className="bg-slate-50 dark:bg-[#121214] p-5 rounded-xl border border-border">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400">
-                  <UserIcon className="w-6 h-6" />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold text-slate-900 dark:text-white font-space-grotesk">{name}</h4>
-                  <div className="flex items-center gap-1.5 mt-1 text-slate-500">
-                    <Mail className="w-3.5 h-3.5" />
-                    <a href={`mailto:${email}`} className="text-sm hover:text-primary-600 transition-colors">{email}</a>
-                  </div>
+            <div className="flex flex-col items-center text-center p-6 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-border relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-r from-zinc-200 to-zinc-300 dark:from-zinc-800 dark:to-zinc-900"></div>
+              
+              <div className="w-20 h-20 bg-white dark:bg-[#121214] rounded-full p-1 shadow-sm border border-border z-10 mb-3">
+                <img 
+                  src={`https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'Lead')}&background=random&color=fff&size=128&bold=true`} 
+                  alt={name} 
+                  className="w-full h-full rounded-full object-cover"
+                />
+              </div>
+              
+              <div className="z-10">
+                <h4 className="text-2xl font-bold text-slate-900 dark:text-white font-space-grotesk">{name}</h4>
+                <div className="flex items-center justify-center gap-1.5 mt-2 text-slate-500 bg-white dark:bg-slate-800 px-3 py-1 rounded-full text-sm shadow-sm border border-border/50">
+                  <Mail className="w-3.5 h-3.5" />
+                  <a href={`mailto:${email}`} className="hover:text-primary-600 transition-colors font-medium">{email}</a>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-border">
                 <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">Current Status</p>
                 <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold ${statusColors[status]}`}>
@@ -159,14 +172,14 @@ export default function LeadModal({ lead, mode, isOpen, onClose, onSuccess }: Le
               </div>
             )}
 
-            <div className="flex justify-end pt-2">
-              <Button type="button" variant="secondary" onClick={onClose} className="w-full sm:w-auto">
-                Close Details
+            <div className="flex justify-between gap-3 pt-4">
+              <Button type="button" variant="ghost" onClick={onClose} className="w-full">
+                See Leads List
               </Button>
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <form onSubmit={handleSubmit} className="px-8 pb-8 space-y-5 relative z-10">
             <Input
               label="Name"
               required
@@ -190,12 +203,12 @@ export default function LeadModal({ lead, mode, isOpen, onClose, onSuccess }: Le
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as LeadStatus)}
-                className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl text-black dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl text-black dark:text-white shadow-sm focus:outline-none focus:ring-0 focus:border-black dark:focus:border-white transition-all font-sans cursor-pointer"
               >
-                <option value="New">New</option>
-                <option value="Contacted">Contacted</option>
-                <option value="Qualified">Qualified</option>
-                <option value="Lost">Lost</option>
+                <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="New">New</option>
+                <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Contacted">Contacted</option>
+                <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Qualified">Qualified</option>
+                <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Lost">Lost</option>
               </select>
               {fieldErrors.status && <p className="mt-1.5 text-sm text-red-500">{fieldErrors.status}</p>}
             </div>
@@ -207,20 +220,21 @@ export default function LeadModal({ lead, mode, isOpen, onClose, onSuccess }: Le
               <select
                 value={source}
                 onChange={(e) => setSource(e.target.value as LeadSource)}
-                className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl text-black dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl text-black dark:text-white shadow-sm focus:outline-none focus:ring-0 focus:border-black dark:focus:border-white transition-all font-sans cursor-pointer"
               >
-                <option value="Website">Website</option>
-                <option value="Instagram">Instagram</option>
-                <option value="Referral">Referral</option>
+                <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Website">Website</option>
+                <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Instagram">Instagram</option>
+                <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Google">Google</option>
+                <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="Referral">Referral</option>
               </select>
               {fieldErrors.source && <p className="mt-1.5 text-sm text-red-500">{fieldErrors.source}</p>}
             </div>
 
-            <div className="flex justify-end gap-3 pt-4">
-              <Button type="button" variant="ghost" onClick={onClose}>
-                Cancel
+            <div className="flex justify-between gap-3 pt-6">
+              <Button type="button" variant="ghost" onClick={onClose} className="px-6">
+                See Leads List
               </Button>
-              <Button type="submit" isLoading={isLoading}>
+              <Button type="submit" isLoading={isLoading} className="flex-1">
                 {mode === 'edit' ? 'Save Changes' : 'Create Lead'}
               </Button>
             </div>

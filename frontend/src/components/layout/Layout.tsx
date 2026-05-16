@@ -1,11 +1,12 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { LogOut, LayoutDashboard, Users } from 'lucide-react';
+import { LogOut, LayoutDashboard, Users, Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function Layout() {
   const { user, logout, isLoading } = useAuth();
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem('theme') === 'dark' || 
@@ -40,16 +41,31 @@ export default function Layout() {
 
   return (
     <div className="flex h-screen bg-background text-foreground overflow-hidden font-outfit">
+      
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-20 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className="w-64 bg-card border-r border-border flex flex-col transition-all duration-300 z-20 relative">
-        <div className="h-20 flex items-center px-8 border-b border-border">
+      <div className={`fixed lg:static inset-y-0 left-0 w-64 bg-card border-r border-border flex flex-col transition-transform duration-300 z-30 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+        <div className="h-20 flex items-center justify-between px-8 border-b border-border">
           <div className="flex items-center gap-3 text-primary-600 dark:text-accent-blue font-bold text-2xl font-space-grotesk tracking-tight">
             <LayoutDashboard className="w-7 h-7" />
             SmartLeads
           </div>
+          <button className="lg:hidden text-slate-400 hover:text-slate-900 dark:hover:text-white" onClick={() => setIsSidebarOpen(false)}>
+            <X className="w-6 h-6" />
+          </button>
         </div>
         <div className="flex-1 py-6 flex flex-col gap-2 px-4">
-          <div className="px-4 py-3 bg-primary-50 dark:bg-primary-500/10 text-primary-700 dark:text-primary-400 rounded-xl flex items-center gap-3 font-medium transition-colors cursor-pointer border border-primary-100 dark:border-primary-500/20">
+          <div 
+            className="px-4 py-3 bg-primary-50 dark:bg-primary-500/10 text-primary-700 dark:text-primary-400 rounded-xl flex items-center gap-3 font-medium transition-colors cursor-pointer border border-primary-100 dark:border-primary-500/20"
+            onClick={() => setIsSidebarOpen(false)}
+          >
             <Users className="w-5 h-5" />
             Leads
           </div>
@@ -81,11 +97,17 @@ export default function Layout() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto relative bg-background">
-        <header className="h-20 border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10 flex items-center px-10 shadow-sm">
+      <div className="flex-1 overflow-auto relative bg-background w-full">
+        <header className="h-20 border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10 flex items-center px-6 lg:px-10 shadow-sm gap-4">
+          <button 
+            className="lg:hidden p-2 -ml-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
+            onClick={() => setIsSidebarOpen(true)}
+          >
+            <Menu className="w-6 h-6" />
+          </button>
           <h1 className="text-xl font-space-grotesk font-semibold text-slate-800 dark:text-white">Dashboard Overview</h1>
         </header>
-        <main className="p-10">
+        <main className="p-4 sm:p-6 lg:p-10">
           <Outlet />
         </main>
       </div>

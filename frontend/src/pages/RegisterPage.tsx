@@ -43,8 +43,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
-      <div className="max-w-md w-full bento-card p-10 relative overflow-hidden group">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-8 sm:py-12">
+      <div className="max-w-md w-full bento-card p-6 sm:p-10 relative overflow-hidden group">
         <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-32 h-32 bg-accent-blue/20 rounded-full blur-[40px] group-hover:bg-accent-blue/30 transition-all duration-500"></div>
         <div className="text-center mb-10 relative z-10">
           <h2 className="text-4xl font-space-grotesk font-bold text-slate-900 dark:text-white tracking-tight">Create Account</h2>
@@ -84,10 +84,10 @@ export default function RegisterPage() {
             <select
               value={role}
               onChange={(e) => setRole(e.target.value as 'admin' | 'sales')}
-              className="w-full px-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all text-black dark:text-white font-outfit appearance-none"
+              className="w-full px-4 py-3.5 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black dark:focus:border-white transition-all font-sans appearance-none relative z-10 cursor-pointer"
             >
-              <option value="sales">Sales User</option>
-              <option value="admin">Admin</option>
+              <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="sales">Sales User</option>
+              <option className="bg-white dark:bg-zinc-900 text-black dark:text-white" value="admin">Admin</option>
             </select>
           </div>
 

@@ -38,8 +38,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="max-w-md w-full bento-card p-10 relative overflow-hidden group">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-8 sm:py-12">
+      <div className="max-w-md w-full bento-card p-6 sm:p-10 relative overflow-hidden group">
         <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-primary-500/20 rounded-full blur-[40px] group-hover:bg-primary-500/30 transition-all duration-500"></div>
         <div className="text-center mb-10 relative z-10">
           <h2 className="text-4xl font-space-grotesk font-bold text-slate-900 dark:text-white tracking-tight">Welcome back</h2>

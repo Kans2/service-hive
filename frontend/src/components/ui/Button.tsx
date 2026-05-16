@@ -18,10 +18,10 @@ export function Button({
   const baseStyles = 'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98] font-space-grotesk tracking-wide';
   
   const variants = {
-    primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500 shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] border border-transparent',
-    secondary: 'bg-white dark:bg-[#18181b] border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-[#27272a] shadow-sm focus:ring-slate-500',
-    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_25px_rgba(220,38,38,0.5)] border border-transparent',
-    ghost: 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-[#27272a] focus:ring-slate-500',
+    primary: 'bg-black text-white hover:bg-zinc-800 dark:bg-black dark:text-white dark:hover:bg-zinc-900 border border-transparent dark:border-white/20 shadow-sm',
+    secondary: 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800 shadow-sm',
+    danger: 'bg-red-600 text-white hover:bg-red-700 shadow-sm border border-transparent',
+    ghost: 'text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800',
   };
 
   const sizes = {

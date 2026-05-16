@@ -297,16 +297,20 @@ export const exportLeadsCSV = async (
  * @access  Private
  */
 export const getLeadsStats = async (
-  _req: AuthRequest,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
+    const { status, source, search } = req.query as Record<string, string>;
+    const filter = buildQuery({ status, source, search });
+
     const [statusCounts, total] = await Promise.all([
       Lead.aggregate<{ _id: string; count: number }>([
+        { $match: filter },
         { $group: { _id: '$status', count: { $sum: 1 } } },
       ]),
-      Lead.countDocuments(),
+      Lead.countDocuments(filter),
     ]);
 
     const stats: Record<string, number> = {
