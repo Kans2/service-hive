@@ -8,6 +8,11 @@ A full-stack **Lead Management Dashboard** built using the **MERN stack** (Mongo
 
 ---
 
+### 🌐 [Live Demo: service-hive-bcq4.onrender.com](https://service-hive-bcq4.onrender.com)
+### 📘 [API Docs: service-hive-bcq4.onrender.com/api-docs/](https://service-hive-bcq4.onrender.com/api-docs/)
+
+---
+
 ## ✅ Features
 
 | Feature | Status |
@@ -154,7 +159,15 @@ docker-compose up --build
 
 ## 📡 API Documentation
 
+### 📘 Swagger UI (Recommended)
+The API is fully documented with Swagger/OpenAPI 3.0. You can explore, test, and view all endpoints interactively at:
+
+👉 **[https://service-hive-bcq4.onrender.com/api-docs/](https://service-hive-bcq4.onrender.com/api-docs/)**
+
+---
+
 **Base URL (Development):** `http://localhost:8000`
+**Base URL (Production):** `https://service-hive-bcq4.onrender.com`
 
 All API responses follow this structure:
 
